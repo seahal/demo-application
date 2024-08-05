@@ -1,0 +1,3 @@
+[submodule "ror"]
+	path = ror
+	url = git@github.com:seahal/demo-application-ror.git
