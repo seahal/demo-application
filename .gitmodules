@@ -1,3 +1,9 @@
 [submodule "ror"]
 	path = ror
-	url = git@github.com:seahal/demo-application-ror.git
+	url = https://github.com/seahal/demo-application-ror.git
+[submodule "demo-application-remix"]
+	path = demo-application-remix
+	url = https://github.com/seahal/demo-application-remix.git
+[submodule "remix"]
+	path = remix
+	url = https://github.com/seahal/demo-application-remix.git
