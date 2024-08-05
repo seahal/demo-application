@@ -155,7 +155,6 @@ services:
   selenium:
     image: seleniarm/standalone-chromium
     restart: always # コンテナが停止すると常に再起動
-#    platform: linux/x86_64
     networks:
       - backend
       - frontend
