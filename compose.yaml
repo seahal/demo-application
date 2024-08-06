@@ -136,22 +136,6 @@ services:
       - ./remix:/remix
     depends_on:
       - ror
-  varnish:
-    image: varnish:stable
-    volumes:
-      - "./varnish/default.vcl:/etc/varnish/default.vcl"
-    ports:
-      - "80:80"
-    tmpfs:
-      - /var/lib/varnish:exec
-    command: "-p default_keep=300"
-    environment:
-      - VARNISH_SIZE=2G
-    networks:
-      - backend
-    depends_on:
-      - ror
-      - remix
   selenium:
     image: seleniarm/standalone-chromium
     restart: always # コンテナが停止すると常に再起動
