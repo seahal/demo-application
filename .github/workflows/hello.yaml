@@ -1,0 +1,30 @@
+name: Hello
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+  # schedule:
+  #   - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      greeting:
+        type: string
+        default: Hello
+        required: true
+        description: ???
+jobs:
+  hello:
+    name: 'First Action!'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          date
+          ls
+          pwd
+          echo "hello, world! ${{inputs.greeting}}"
+      - name: "context"
+        run: |
+          echo "env -> ${{ env }}"
+          echo "github.actor -> ${{ github.actor }}"
+          echo "github.action -> ${{ github.action }}"
+          echo "github.job => ${{ github.job }}"

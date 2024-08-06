@@ -7,3 +7,6 @@
 [submodule "remix"]
 	path = remix
 	url = https://github.com/seahal/demo-application-remix.git
+[submodule "rust"]
+	path = rust
+	url = https://github.com/seahal/demo-application-rust
