@@ -1,7 +1,5 @@
-name: demo
 services:
   kafka:
-    container_name: kafka
     image: confluentinc/cp-kafka:7.7.0
     ports:
       - 9092:9092
@@ -94,19 +92,11 @@ services:
       context: ./ror
       target: development
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3333 -b '0.0.0.0'"
-    environment:
-      POSTGRES_URI: 'db-postgresql'
-      POSTGRES_USER: default
-      POSTGRES_PASSWORD: password
-      RAILS_URI: 'http://localhost:3333'
-      REMIX_URI: 'http://localhost:5173'
-      REDIS_CACHE_URL: 'redis://redis:6379'
-      REDIS_SESSION_URL: 'redis://valkey:6379'
-    restart: always # コンテナが停止すると常に再起動
-    tty: true # 疑似ターミナル (pseudo-TTY) を割り当て。https://docs.docker.jp/compose/compose-file/index.html#tty
-    stdin_open: true # サービス コンテナに標準入力を割り当てて実行するよう設定(https://docs.docker.jp/compose/compose-file/index.html#stdin-open)。
+    restart: always
+    tty: true
+    stdin_open: true
     ports:
-      - "3333:3333"
+      - "3456:3456"
     volumes:
       - ./ror:/ror
     networks:
@@ -119,15 +109,15 @@ services:
 #      - kafka
 #      - elasticsearch
   remix:
-    build: ./remix
-    command: ash -c "npx vite --host"
+    build:
+      context: ./remix
+      target: development
+    command: bash -c "npm run dev"
     restart: always # コンテナが停止すると常に再起動
     tty: true
     stdin_open: true
-    environment:
-      RAILS_URI: 'http://localhost:3333'
-      REMIX_URI: 'http://localhost:5173'
     ports:
+      - "4000:4000"
       - "5173:5173"
       - "8002:8002"
     networks:
@@ -136,6 +126,17 @@ services:
       - ./remix:/remix
     depends_on:
       - ror
+  cargo:
+    build:
+      context: ./cargo
+      target: development
+    tty: true
+    stdin_open: true
+    command:  bash -c "ls -F | grep '/' | xargs -I {} bash -c 'cd ./{}; cargo run'"
+    networks:
+      - frontend
+    volumes:
+      - ./cargo:/cargo
   selenium:
     image: seleniarm/standalone-chromium
     restart: always # コンテナが停止すると常に再起動
@@ -149,14 +150,6 @@ services:
     depends_on:
       - ror
       - remix
-  rust:
-    build:
-      context: ./rust
-      target: development
-    networks:
-      - frontend
-    volumes:
-      - ./rust:/rust
 volumes: #
   postgres_volume:
   redis_volume:
